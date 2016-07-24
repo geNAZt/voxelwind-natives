@@ -21,5 +21,5 @@ public class NativeCompressImpl
 
     native int process(long ctx, long in, int inLength, long out, int outLength, boolean compress);
 
-    native long checksum(long ctx);
+    native int checksum(long ctx);
 }

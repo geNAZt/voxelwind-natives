@@ -10,5 +10,5 @@ public interface BungeeZlib
 
     void free();
 
-    long process(ByteBuf in, ByteBuf out) throws DataFormatException;
+    int process(ByteBuf in, ByteBuf out) throws DataFormatException;
 }
