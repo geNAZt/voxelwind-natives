@@ -9,7 +9,7 @@ jlong JNICALL Java_net_md_15_bungee_jni_cipher_NativeCipherImpl_init(JNIEnv* env
 
     // TODO: Perhaps we need to throw some exceptions in the unlikely event this fails?
     EVP_CIPHER_CTX *cipherCtx = EVP_CIPHER_CTX_new();
-    EVP_CipherInit(cipherCtx, EVP_aes_128_cfb8(), (byte*) keyBytes, (byte*) ivBytes, forEncryption);
+    EVP_CipherInit(cipherCtx, EVP_aes_192_cfb8(), (byte*) keyBytes, (byte*) ivBytes, forEncryption);
 
     env->ReleaseByteArrayElements(key, keyBytes, JNI_ABORT);
     env->ReleaseByteArrayElements(iv, ivBytes, JNI_ABORT);

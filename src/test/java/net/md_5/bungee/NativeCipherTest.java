@@ -13,18 +13,18 @@ import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+
 import net.md_5.bungee.jni.NativeCode;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class NativeCipherTest
 {
 
-    private final byte[] plainBytes = "This is a test".getBytes();
-    private final byte[] cipheredBytes = new byte[]
-    {
-        50, -7, 89, 1, -11, -32, -118, -48, -2, -72, 105, 97, -70, -81
-    };
-    private final SecretKey secret = new SecretKeySpec( new byte[ 16 ], "AES" );
+    private final byte[] plainBytes = "Truly, a human menace".getBytes();
+    private final byte[] cipheredBytes = DatatypeConverter.parseBase64Binary("/jSoXX35zh352LJjrOnWEvhTeM+h");
+    private final byte[] iv = new byte[ 16 ];
+    private final SecretKey secret = new SecretKeySpec( new byte[ 24 ], "AES" );
     private static final int BENCHMARK_COUNT = 4096;
     //
     private static final NativeCode<BungeeCipher> factory = new NativeCode( "native-cipher", JavaCipher.class, NativeCipher.class );
@@ -94,14 +94,17 @@ public class NativeCipherTest
         ByteBuf out = Unpooled.directBuffer( plainBytes.length );
 
         // Encrypt
-        cipher.init( true, secret, secret.getEncoded() );
+        cipher.init( true, secret, iv );
         cipher.cipher( nativePlain, out );
+
+        System.out.println(ByteBufUtil.hexDump(out) + " / expected: " + ByteBufUtil.hexDump(nativeCiphered));
+
         Assert.assertEquals( nativeCiphered, out );
 
         out.clear();
 
         // Decrypt
-        cipher.init( false, secret, secret.getEncoded() );
+        cipher.init( false, secret, iv );
         cipher.cipher( nativeCiphered, out );
         nativePlain.resetReaderIndex();
         Assert.assertEquals( nativePlain, out );
@@ -121,7 +124,7 @@ public class NativeCipherTest
         ByteBuf nativeCiphered = Unpooled.directBuffer( plainBytes.length );
 
         // Encrypt
-        cipher.init( true, secret, secret.getEncoded() );
+        cipher.init( true, secret, iv );
         long start = System.currentTimeMillis();
         for ( int i = 0; i < BENCHMARK_COUNT; i++ )
         {
@@ -135,7 +138,7 @@ public class NativeCipherTest
         ByteBuf out = Unpooled.directBuffer( plainBytes.length );
 
         // Decrypt
-        cipher.init( false, secret, secret.getEncoded() );
+        cipher.init( false, secret, iv );
         start = System.currentTimeMillis();
         for ( int i = 0; i < BENCHMARK_COUNT; i++ )
         {
