@@ -1,6 +1,5 @@
 package net.md_5.bungee;
 
-import io.netty.buffer.ByteBufUtil;
 import net.md_5.bungee.jni.cipher.NativeCipher;
 import net.md_5.bungee.jni.cipher.JavaCipher;
 import net.md_5.bungee.jni.cipher.BungeeCipher;
@@ -96,8 +95,6 @@ public class NativeCipherTest
         // Encrypt
         cipher.init( true, secret, iv );
         cipher.cipher( nativePlain, out );
-
-        System.out.println(ByteBufUtil.hexDump(out) + " / expected: " + ByteBufUtil.hexDump(nativeCiphered));
 
         Assert.assertEquals( nativeCiphered, out );
 
