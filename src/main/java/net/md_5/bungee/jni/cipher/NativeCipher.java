@@ -20,7 +20,7 @@ public class NativeCipher implements BungeeCipher
     {
         free();
 
-        Preconditions.checkArgument( key.getEncoded().length == 24, "Not a 192-bit AES key");
+        Preconditions.checkArgument( key.getEncoded().length == 32, "Not a 256-bit AES key");
         Preconditions.checkArgument( iv.length == 16, "IV must be 16 bytes long");
 
         this.ctx = nativeCipher.init( forEncryption, key.getEncoded(), iv );
