@@ -1,6 +1,5 @@
 package net.md_5.bungee;
 
-import io.netty.buffer.ByteBufUtil;
 import net.md_5.bungee.jni.cipher.NativeCipher;
 import net.md_5.bungee.jni.cipher.JavaCipher;
 import net.md_5.bungee.jni.cipher.BungeeCipher;
@@ -22,7 +21,7 @@ public class NativeCipherTest
 {
 
     private final byte[] plainBytes = "Truly, a human menace".getBytes();
-    private final byte[] cipheredBytes = DatatypeConverter.parseBase64Binary("iOe1FNtsqeiNINd58+oA6seMSeyR");
+    private final byte[] cipheredBytes = DatatypeConverter.parseHexBinary("88f8ab423064f69f873f4e1773ec9a49ebde9da97b");
     private final byte[] iv = new byte[ 16 ];
     private final SecretKey secret = new SecretKeySpec( new byte[ 32 ], "AES" );
     private static final int BENCHMARK_COUNT = 4096;
@@ -97,7 +96,6 @@ public class NativeCipherTest
         cipher.init( true, secret, iv );
         cipher.cipher( nativePlain, out );
 
-        System.out.println(ByteBufUtil.hexDump(out) + " / " + ByteBufUtil.hexDump(cipheredBytes));
         Assert.assertEquals( nativeCiphered, out );
 
         out.clear();
