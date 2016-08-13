@@ -1,5 +1,6 @@
 package net.md_5.bungee;
 
+import com.voxelwind.server.jni.CryptoUtil;
 import net.md_5.bungee.jni.cipher.NativeCipher;
 import net.md_5.bungee.jni.cipher.JavaCipher;
 import net.md_5.bungee.jni.cipher.BungeeCipher;
@@ -60,6 +61,11 @@ public class NativeCipherTest
     @Test
     public void testJDK() throws Exception
     {
+        if ( !CryptoUtil.isJCEUnlimitedStrength() )
+        {
+            return;
+        }
+
         // Create JDK cipher
         BungeeCipher cipher = new JavaCipher();
 
@@ -70,6 +76,11 @@ public class NativeCipherTest
     @Test
     public void testJDKBenchmark() throws Exception
     {
+        if ( !CryptoUtil.isJCEUnlimitedStrength() )
+        {
+            return;
+        }
+
         // Create JDK cipher
         BungeeCipher cipher = new JavaCipher();
 
