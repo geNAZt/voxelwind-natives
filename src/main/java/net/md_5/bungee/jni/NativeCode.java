@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import lombok.Getter;
 import net.md_5.bungee.jni.cipher.BungeeCipher;
 
 public final class NativeCode<T>
@@ -15,6 +17,7 @@ public final class NativeCode<T>
     private final Class<T> javaImpl;
     private final Class<T> nativeImpl;
     //
+    @Getter
     private boolean loaded;
 
     public NativeCode(String name, Class<T> javaImpl, Class<T> nativeImpl)
