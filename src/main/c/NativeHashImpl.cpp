@@ -29,12 +29,15 @@ jint throwException(JNIEnv *env, const char* message, int err) {
 
 jbyteArray JNICALL Java_com_voxelwind_server_jni_hash_NativeHashImpl_digest(JNIEnv *env, jobject obj, jlong ctx) {
     // SHA-256 produces 32 bytes (256 bits)
-    void *output = calloc(1, 32);
+    void *output = malloc(32);
     if (output == NULL) {
         throwException(env, "Ran out of memory while allocating memory for SHA256 output: ", 0);
     }
     EVP_DigestFinal((EVP_MD_CTX*) ctx, (unsigned char*) output, NULL);
     jbyteArray array = env->NewByteArray(32);
     env->SetByteArrayRegion(array, 0, 32, (jbyte*) output);
+
+    // Output is no longer required.
+    free(output);
     return array;
 }
