@@ -44,21 +44,6 @@ public class NativeCipherTest
     }
 
     @Test
-    public void testOpenSSLBenchmark() throws Exception
-    {
-        if ( NativeCode.isSupported() )
-        {
-            boolean loaded = factory.load();
-            Assert.assertTrue( "Native cipher failed to load!", loaded );
-
-            NativeCipher cipher = new NativeCipher();
-
-            System.out.println( "Benchmarking OpenSSL cipher..." );
-            testBenchmark( cipher );
-        }
-    }
-
-    @Test
     public void testJDK() throws Exception
     {
         if ( !CryptoUtil.isJCEUnlimitedStrength() )
@@ -71,21 +56,6 @@ public class NativeCipherTest
 
         System.out.println( "Testing Java cipher..." );
         testACipher( cipher );
-    }
-
-    @Test
-    public void testJDKBenchmark() throws Exception
-    {
-        if ( !CryptoUtil.isJCEUnlimitedStrength() )
-        {
-            return;
-        }
-
-        // Create JDK cipher
-        BungeeCipher cipher = new JavaCipher();
-
-        System.out.println( "Benchmarking Java cipher..." );
-        testBenchmark( cipher );
     }
 
     /**
@@ -118,42 +88,5 @@ public class NativeCipherTest
         Assert.assertEquals( nativePlain, out );
 
         System.out.println( "This cipher works correctly!" );
-    }
-
-    public void testBenchmark(BungeeCipher cipher) throws Exception
-    {
-        // Create input buf
-        byte[] random = new byte[ 1 << 12 ];
-        new Random().nextBytes( random );
-        ByteBuf nativePlain = Unpooled.directBuffer();
-        nativePlain.writeBytes( random );
-
-        // Create output buf
-        ByteBuf nativeCiphered = Unpooled.directBuffer( plainBytes.length );
-
-        // Encrypt
-        cipher.init( true, secret, iv );
-        long start = System.currentTimeMillis();
-        for ( int i = 0; i < BENCHMARK_COUNT; i++ )
-        {
-            nativeCiphered.clear();
-            cipher.cipher( nativePlain, nativeCiphered );
-            nativePlain.readerIndex( 0 );
-        }
-        System.out.println( String.format( "Encryption Iteration: %d, Elapsed: %d ms", BENCHMARK_COUNT, System.currentTimeMillis() - start ) );
-
-        // Create output buf
-        ByteBuf out = Unpooled.directBuffer( plainBytes.length );
-
-        // Decrypt
-        cipher.init( false, secret, iv );
-        start = System.currentTimeMillis();
-        for ( int i = 0; i < BENCHMARK_COUNT; i++ )
-        {
-            cipher.cipher( nativeCiphered, out );
-            nativeCiphered.readerIndex( 0 );
-            out.clear();
-        }
-        System.out.println( String.format( "Decryption Iteration: %d, Elapsed: %d ms", BENCHMARK_COUNT, System.currentTimeMillis() - start ) );
     }
 }

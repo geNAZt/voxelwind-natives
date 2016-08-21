@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.xml.bind.DatatypeConverter;
-import java.util.Random;
 
 public class NativeHashTest
 {
@@ -28,16 +27,6 @@ public class NativeHashTest
         test( new JavaHash() );
     }
 
-    @Test
-    public void doBench() throws Exception
-    {
-        if ( NativeCode.isSupported() )
-        {
-            bench( NativeHash.class );
-        }
-        bench( JavaHash.class );
-    }
-
     private void test(VoxelwindHash hash)
     {
         System.out.println( "Testing: " + hash );
@@ -51,31 +40,5 @@ public class NativeHashTest
         Assert.assertArrayEquals( "Hashes do not match", EXPECTED_HASH, out );
 
         buf.release();
-    }
-
-    private void bench( Class<? extends VoxelwindHash> klass ) throws Exception
-    {
-        System.out.println( "Benching: " + klass.getName() );
-
-        // Set up the buffer
-        ByteBuf buf = Unpooled.directBuffer();
-        Random random = new Random( 1 );
-        byte[] data = new byte[ 1 << 15 ]; // 32KB is representative of the largest amount these functions will crunch
-        random.nextBytes( data );
-        buf.writeBytes( data );
-
-        // Run the test
-        long start = System.currentTimeMillis();
-
-        for ( int i = 0; i < 4096; i++ )
-        {
-            VoxelwindHash hash = klass.newInstance();
-            hash.update( buf );
-            hash.digest();
-        }
-
-        buf.release();
-
-        System.out.println( "Time taken for " + klass.getName() + ": " + ( System.currentTimeMillis() - start ) + "ms" );
     }
 }
