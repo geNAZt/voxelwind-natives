@@ -6,7 +6,6 @@ import net.md_5.bungee.jni.cipher.JavaCipher;
 import net.md_5.bungee.jni.cipher.BungeeCipher;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.FixMethodOrder;
