@@ -6,13 +6,12 @@ import io.netty.buffer.ByteBuf;
 public class NativeHash implements VoxelwindHash
 {
 
-    private final NativeHashImpl impl;
+    private static final NativeHashImpl impl = new NativeHashImpl();
     private final long ctx;
     private boolean completed = false;
 
     public NativeHash()
     {
-        impl = new NativeHashImpl();
         ctx = impl.init();
     }
 
@@ -31,7 +30,8 @@ public class NativeHash implements VoxelwindHash
     }
 
     @Override
-    public byte[] digest() {
+    public byte[] digest()
+    {
         checkState();
         byte[] digest = impl.digest(ctx);
         completed = true;

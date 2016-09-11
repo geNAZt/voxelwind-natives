@@ -3,15 +3,14 @@ package net.md_5.bungee.jni.cipher;
 import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import lombok.Getter;
+
 import javax.crypto.SecretKey;
 import java.security.GeneralSecurityException;
 
 public class NativeCipher implements BungeeCipher
 {
 
-    @Getter
-    private final NativeCipherImpl nativeCipher = new NativeCipherImpl();
+    private static final NativeCipherImpl impl = new NativeCipherImpl();
     /*============================================================================*/
     private long ctx;
 
@@ -23,7 +22,7 @@ public class NativeCipher implements BungeeCipher
         Preconditions.checkArgument( key.getEncoded().length == 32, "Not a 256-bit AES key");
         Preconditions.checkArgument( iv.length == 16, "IV must be 16 bytes long");
 
-        this.ctx = nativeCipher.init( forEncryption, key.getEncoded(), iv );
+        this.ctx = impl.init( forEncryption, key.getEncoded(), iv );
     }
 
     @Override
@@ -31,7 +30,7 @@ public class NativeCipher implements BungeeCipher
     {
         if ( ctx != 0 )
         {
-            nativeCipher.free( ctx );
+            impl.free( ctx );
             ctx = 0;
         }
     }
@@ -56,7 +55,7 @@ public class NativeCipher implements BungeeCipher
         out.ensureWritable( length );
 
         // Cipher the bytes
-        nativeCipher.cipher( ctx, in.memoryAddress() + in.readerIndex(), out.memoryAddress() + out.writerIndex(), length );
+        impl.cipher( ctx, in.memoryAddress() + in.readerIndex(), out.memoryAddress() + out.writerIndex(), length );
 
         // Go to the end of the buffer, all bytes would of been read
         in.readerIndex( in.writerIndex() );
