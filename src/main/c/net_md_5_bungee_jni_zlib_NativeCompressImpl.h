@@ -47,14 +47,6 @@ JNIEXPORT jlong JNICALL Java_net_md_15_bungee_jni_zlib_NativeCompressImpl_init
 JNIEXPORT jint JNICALL Java_net_md_15_bungee_jni_zlib_NativeCompressImpl_process
   (JNIEnv *, jobject, jlong, jlong, jint, jlong, jint, jboolean);
 
-/*
- * Class:     net_md_5_bungee_jni_zlib_NativeCompressImpl
- * Method:    checksum
- * Signature: (J)I
- */
-JNIEXPORT jint JNICALL Java_net_md_15_bungee_jni_zlib_NativeCompressImpl_checksum
-  (JNIEnv *, jobject, jlong);
-
 #ifdef __cplusplus
 }
 #endif

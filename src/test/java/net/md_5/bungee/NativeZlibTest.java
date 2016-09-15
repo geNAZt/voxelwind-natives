@@ -43,7 +43,7 @@ public class NativeZlibTest
 
         ByteBuf compressed = Unpooled.directBuffer();
 
-        long compressedAdler = zlib.process( originalBuf, compressed );
+        zlib.process( originalBuf, compressed );
 
         // Repeat here to test .reset()
         originalBuf = Unpooled.directBuffer();
@@ -56,7 +56,7 @@ public class NativeZlibTest
         ByteBuf uncompressed = Unpooled.directBuffer();
 
         zlib.init( false, 0 );
-        long decompressedAdler = zlib.process( compressed, uncompressed );
+        zlib.process( compressed, uncompressed );
 
         byte[] check = new byte[ uncompressed.readableBytes() ];
         uncompressed.readBytes( check );
@@ -64,7 +64,6 @@ public class NativeZlibTest
         long elapsed = System.currentTimeMillis() - start;
         System.out.println( "Took: " + elapsed + "ms" );
 
-        Assert.assertEquals( "Adler32 does not match", compressedAdler, decompressedAdler );
         Assert.assertTrue( "Results do not match", Arrays.equals( dataBuf, check ) );
     }
 }

@@ -80,9 +80,3 @@ jint JNICALL Java_net_md_15_bungee_jni_zlib_NativeCompressImpl_process(JNIEnv* e
 
     return outLength - stream->avail_out;
 }
-
-jint JNICALL Java_net_md_15_bungee_jni_zlib_NativeCompressImpl_checksum(JNIEnv *, jobject, jlong ctx) {
-    z_stream* stream = (z_stream*) ctx;
-
-    return (jint) stream->adler;
-}

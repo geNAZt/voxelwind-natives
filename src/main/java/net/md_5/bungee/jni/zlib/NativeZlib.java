@@ -37,7 +37,7 @@ public class NativeZlib implements BungeeZlib
     }
 
     @Override
-    public int process(ByteBuf in, ByteBuf out) throws DataFormatException
+    public void process(ByteBuf in, ByteBuf out) throws DataFormatException
     {
         // Smoke tests
         in.memoryAddress();
@@ -54,10 +54,8 @@ public class NativeZlib implements BungeeZlib
             out.writerIndex( out.writerIndex() + processed );
         }
 
-        int adler = nativeCompress.checksum( ctx );
         nativeCompress.reset( ctx, compress );
         nativeCompress.consumed = 0;
         nativeCompress.finished = false;
-        return adler;
     }
 }

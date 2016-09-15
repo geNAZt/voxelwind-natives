@@ -43,7 +43,7 @@ public class JavaZlib implements BungeeZlib
     }
 
     @Override
-    public int process(ByteBuf in, ByteBuf out) throws DataFormatException
+    public void process(ByteBuf in, ByteBuf out) throws DataFormatException
     {
         byte[] inData = new byte[ in.readableBytes() ];
         in.readBytes( inData );
@@ -59,9 +59,7 @@ public class JavaZlib implements BungeeZlib
                 out.writeBytes( buffer, 0, count );
             }
 
-            int adler = deflater.getAdler();
             deflater.reset();
-            return adler;
         } else
         {
             inflater.setInput( inData );
@@ -72,9 +70,7 @@ public class JavaZlib implements BungeeZlib
                 out.writeBytes( buffer, 0, count );
             }
 
-            int adler = inflater.getAdler();
             inflater.reset();
-            return adler;
         }
     }
 }
